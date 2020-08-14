@@ -16,4 +16,5 @@ var (
 	ErrForbidden     = errors.New("Access to this resource is forbidden")
 	ErrEmail         = errors.New("Email not valid")
 	ErrPassword      = errors.New("Password must be greater than 6 chars")
+	ErrEmailExists   = errors.New("Email alreadt exists")
 )
