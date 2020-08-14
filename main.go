@@ -38,9 +38,9 @@ func main() {
 
 	userRepo := user.NewDatabaseRepo(db)
 	userSvc := user.NewService(userRepo)
-	userHandler := handlers.NewUserHandler(userSvc)
 
 	r := gin.Default()
+	r.HandleMethodNotAllowed = true
 	v1 := r.Group("api/v1")
 	{
 		v1.GET("/ping", func(c *gin.Context) {
@@ -48,11 +48,11 @@ func main() {
 		})
 		usrGroup := v1.Group("/user")
 		{
-			usrGroup.POST("/register", userHandler.RegisterUser)
+			usrGroup.POST("/register", handlers.RegisterUser(userSvc))
 		}
 		// v1.Group("article")
 	}
 
-	r.Run(":8080")
+	r.Run(":8000")
 
 }

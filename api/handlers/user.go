@@ -9,34 +9,34 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type usrHandler struct {
-	svc user.Service
-}
-
-//NewUserHandler handles user routes
-func NewUserHandler(svc user.Service) usrHandler {
-	return usrHandler{svc: svc}
-}
-
 //RegisterUser used to reg user
-func (handler usrHandler) RegisterUser(ctx *gin.Context) {
+func RegisterUser(svc user.Service) gin.HandlerFunc {
 
-	user := &user.User{}
-	if err := ctx.ShouldBindJSON(&user); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	return func(ctx *gin.Context) {
+		user := &user.User{}
+		if err := ctx.ShouldBindJSON(&user); err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		}
+		user, err := svc.Register(user)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		}
+		token, err := middleware.CreateToken(user.UserID)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		}
+		user.Password = ""
+		ctx.JSON(http.StatusCreated, gin.H{
+			"message": "user created",
+			"token":   token,
+			"user":    *user,
+		})
 	}
-	user, err := handler.svc.Register(user)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+}
+
+//LoginUser is used gor loggin in user
+func LoginUser(svc user.Service) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		
 	}
-	token, err := middleware.CreateToken(user.UserID)
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-	}
-	user.Password = ""
-	ctx.JSON(http.StatusCreated, gin.H{
-		"message": "user created",
-		"token":   token,
-		"user":    *user,
-	})
 }
