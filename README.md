@@ -66,4 +66,98 @@ user, err := svc.Login(user.Email, user.Password)
 		}
 ```
 
-> I'll update this readme when I add more routes and such
+## Current routes
+
+```
+GET    /api/v1/ping 
+```
+
+Response:
+```js
+{
+"message": "pong"
+}
+```
+
+```
+POST   /api/v1/user/register
+```
+
+Body:
+```js
+{
+  "name":"Sidv",
+  "email":"sidv22@gmail.com",
+  "password":"Asdfg12345"
+}
+```
+
+Response:
+```
+{
+    "message": "user created",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6NCwiYXV0aG9yaXplZCI6dHJ1ZSwiZXhwIjoxNTk3NTgwNzE0fQ.Rd4RD8TVZuMzljF78jDTK1Id2uqFzvewrffNmQ3aXU4",
+    "user": {
+        "ID": 4,
+        "CreatedAt": "2020-08-15T13:25:14.538731408Z",
+        "UpdatedAt": "2020-08-15T13:25:14.538731408Z",
+        "DeletedAt": null,
+        "name": "Sidv",
+        "email": "sidv2@gmail.com",
+        "password": ""
+    }
+}
+```
+
+```
+POST   /api/v1/user/login
+```
+
+Body:
+```js
+{
+  "email":"sidv22@gmail.com",
+  "password":"Asdfg12345"
+}
+```
+
+Response
+```js
+{
+    "message": "login success",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6NSwiYXV0aG9yaXplZCI6dHJ1ZSwiZXhwIjoxNTk3NTgwNzY4fQ.RoWsJPM0GZoqK3NTadHLFsQkKRNf23E0evQOu2yWVUg",
+    "user": {
+        "ID": 5,
+        "CreatedAt": "2020-08-15T13:25:51.507834Z",
+        "UpdatedAt": "2020-08-15T13:25:51.507834Z",
+        "DeletedAt": null,
+        "name": "Sidv",
+        "email": "sidv11@gmail.com",
+        "password": ""
+    }
+}
+```
+
+```
+GET    /api/v1/user/getdetails?email=<YOUR EMAIL>
+```
+Headers:
+```Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6NSwiYXV0aG9yaXplZCI6dHJ1ZSwiZXhwIjoxNTk3NTgwNzY4fQ.RoWsJPM0GZoqK3NTadHLFsQkKRNf23E0evQOu2yWVUg```
+
+Response:
+```js
+{
+    "message": "user found",
+    "user": {
+        "ID": 5,
+        "CreatedAt": "2020-08-15T13:25:51.507834Z",
+        "UpdatedAt": "2020-08-15T13:25:51.507834Z",
+        "DeletedAt": null,
+        "name": "Sidv",
+        "email": "sidv11@gmail.com",
+        "password": ""
+    }
+}
+```
+
+
