@@ -69,7 +69,7 @@ if err != nil {
 ## Current routes
 
 
-1. **```GET```  /api/v1/ping**
+1. **```GET```   /api/v1/ping**
 
 
 Response:
@@ -79,9 +79,9 @@ Response:
 }
 ```
 
-```
-POST   /api/v1/user/register
-```
+
+2. **```POST```   /api/v1/user/register**
+
 
 Body:
 ```js
@@ -111,7 +111,7 @@ Response:
 
 
 
-2. **POST   /api/v1/user/login**
+3. **```POST```   /api/v1/user/login**
 
 
 Body:
@@ -140,7 +140,7 @@ Response
 ```
 
 
-3. **GET    /api/v1/user/getdetails?email=YOUR EMAIL**
+4. **```GET```    /api/v1/user/getdetails?email=YOUR EMAIL**
 
 Headers:
 ```Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6NSwiYXV0aG9yaXplZCI6dHJ1ZSwiZXhwIjoxNTk3NTgwNzY4fQ.RoWsJPM0GZoqK3NTadHLFsQkKRNf23E0evQOu2yWVUg```
