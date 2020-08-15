@@ -15,32 +15,32 @@ Refer these:
 
 ## Why use Gin?
 
-0. It uses context since its based on [httprouter](https://github.com/julienschmidt/httprouter)
+0. **It uses context since its based on [httprouter](https://github.com/julienschmidt/httprouter)**
 
-1. Route grouping and great support for middleware
+1. **Route grouping and great support for middleware**
 
 ```go
 [main.go]
 
 v1 := r.Group("api/v1")
+{
+	v1.GET("/ping", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"message": "pong"})
+	})
+	usrGroup := v1.Group("/user")
 	{
-		v1.GET("/ping", func(c *gin.Context) {
-			c.JSON(http.StatusOK, gin.H{"message": "pong"})
-		})
-		usrGroup := v1.Group("/user")
+		usrGroup.POST("/register", handlers.RegisterUser(userSvc))
+		usrGroup.POST("/login", handlers.LoginUser(userSvc))
+		usrGroup.Use(middleware.BasicJWTAuth(userSvc))
 		{
-			usrGroup.POST("/register", handlers.RegisterUser(userSvc))
-			usrGroup.POST("/login", handlers.LoginUser(userSvc))
-			usrGroup.Use(middleware.BasicJWTAuth(userSvc))
-			{
-				usrGroup.GET("/getdetails", handlers.GetUserDetails(userSvc))
-			}
+			usrGroup.GET("/getdetails", handlers.GetUserDetails(userSvc))
 		}
-		// v1.Group("article")
 	}
+	// v1.Group("article")
+}
 ```
 
-2. Logger support
+2. **Logger support**
 
 ```bash
 [GIN-debug] GET    /api/v1/ping              --> main.main.func1 (3 handlers)
@@ -53,24 +53,24 @@ v1 := r.Group("api/v1")
 [GIN] 2020/08/15 - 18:34:14 | 404 |         4.1µs |             ::1 | GET      "/favicon.ico"
 ```
 
-3. Reduces a lot of boilerplate code attached with net/http and is a lot faster than net/http
+3. **Reduces a lot of boilerplate code attached with net/http and is a lot faster than net/http**
 
 ```go
 [api/handlers/user.go, Login function]
 
 user, err := svc.Login(user.Email, user.Password)
-		if err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			ctx.Abort()
-			return
-		}
+if err != nil {
+	ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	ctx.Abort()
+	return
+}
 ```
 
 ## Current routes
 
-```
-GET    /api/v1/ping 
-```
+
+1. **GET    /api/v1/ping **
+
 
 Response:
 ```js
@@ -109,9 +109,10 @@ Response:
 }
 ```
 
-```
-POST   /api/v1/user/login
-```
+
+
+2. **POST   /api/v1/user/login**
+
 
 Body:
 ```js
@@ -138,9 +139,9 @@ Response
 }
 ```
 
-```
-GET    /api/v1/user/getdetails?email=<YOUR EMAIL>
-```
+
+3. **GET    /api/v1/user/getdetails?email=YOUR EMAIL**
+
 Headers:
 ```Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6NSwiYXV0aG9yaXplZCI6dHJ1ZSwiZXhwIjoxNTk3NTgwNzY4fQ.RoWsJPM0GZoqK3NTadHLFsQkKRNf23E0evQOu2yWVUg```
 
