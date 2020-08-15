@@ -7,6 +7,7 @@ import (
 //a list of api specific errors
 var (
 	ErrInvalidToken       = errors.New("Invalid token")
+	ErrTokenMissing       = errors.New("Token not provided")
 	ErrNotFound           = errors.New("Not found")
 	ErrInvalidCredentials = errors.New("Invalid credentials provided")
 	ErrNoContent          = errors.New("No content")

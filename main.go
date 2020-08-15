@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/BRO3886/gin-learn/api/middleware"
+
 	"github.com/BRO3886/gin-learn/api/handlers"
 	"github.com/BRO3886/gin-learn/pkg/user"
 	"github.com/jinzhu/gorm"
@@ -51,7 +53,10 @@ func main() {
 		{
 			usrGroup.POST("/register", handlers.RegisterUser(userSvc))
 			usrGroup.POST("/login", handlers.LoginUser(userSvc))
-			usrGroup.POST("/getdetails", handlers.GetUserDetails(userSvc))
+			usrGroup.Use(middleware.BasicJWTAuth(userSvc))
+			{
+				usrGroup.GET("/getdetails", handlers.GetUserDetails(userSvc))
+			}
 		}
 		// v1.Group("article")
 	}

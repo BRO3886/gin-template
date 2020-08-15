@@ -16,16 +16,19 @@ func RegisterUser(svc user.Service) gin.HandlerFunc {
 		user := &user.User{}
 		if err := ctx.ShouldBindJSON(&user); err != nil {
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			ctx.Abort()
 			return
 		}
 		user, err := svc.Register(user)
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			ctx.Abort()
 			return
 		}
 		token, err := middleware.CreateToken(uint32(user.ID))
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			ctx.Abort()
 			return
 		}
 		user.Password = ""
@@ -43,15 +46,19 @@ func LoginUser(svc user.Service) gin.HandlerFunc {
 		user := &user.User{}
 		if err := ctx.ShouldBindJSON(&user); err != nil {
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			ctx.Abort()
+			return
 		}
 		user, err := svc.Login(user.Email, user.Password)
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			ctx.Abort()
 			return
 		}
 		token, err := middleware.CreateToken(uint32(user.ID))
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			ctx.Abort()
 			return
 		}
 		user.Password = ""
@@ -67,14 +74,11 @@ func LoginUser(svc user.Service) gin.HandlerFunc {
 //GetUserDetails returns user details
 func GetUserDetails(svc user.Service) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		user := &user.User{}
-		if err := ctx.ShouldBindJSON(&user); err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-		user, err := svc.GetUserByEmail(user.Email)
+
+		user, err := svc.GetUserByEmail(ctx.Query("email"))
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			ctx.Abort()
 			return
 		}
 		user.Password = ""

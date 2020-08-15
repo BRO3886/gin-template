@@ -65,7 +65,7 @@ func (s *service) Login(email, password string) (*User, error) {
 	}
 
 	user := &User{}
-	user, err := s.repo.FindByEmail(user.Email)
+	user, err := s.repo.FindByEmail(email)
 	if err != nil {
 		return nil, err
 	}

@@ -29,7 +29,7 @@ func (r *repo) Register(user *User) (*User, error) {
 func (r *repo) FindByID(id uint32) (*User, error) {
 	tx := r.DB.Begin()
 	user := &User{}
-	if err := tx.Where("user_id=?", id).Find(user).Error; err != nil {
+	if err := tx.Where("id=?", id).Find(user).Error; err != nil {
 		tx.Rollback()
 		return nil, pkg.ErrNotFound
 	}
