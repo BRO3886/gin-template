@@ -35,7 +35,7 @@ func main() {
 		fmt.Println(err)
 		log.Fatal("error conneting to DB")
 	}
-	db.LogMode(true)
+	db.LogMode(false)
 	db.AutoMigrate(&user.User{})
 	log.Println("connected to db")
 
