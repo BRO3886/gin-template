@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -13,6 +12,7 @@ import (
 	"github.com/jinzhu/gorm"
 
 	"github.com/gin-gonic/gin"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
@@ -26,7 +26,8 @@ func connectDB() (*gorm.DB, error) {
 }
 
 func main() {
-	fmt.Println("Stared backend server")
+	log.Println("Stared backend server")
+	gin.SetMode(os.Getenv("GIN_MODE"))
 
 	db, err := connectDB()
 	if err != nil {
@@ -61,6 +62,13 @@ func main() {
 		// v1.Group("article")
 	}
 
-	r.Run(":8000")
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "5432"
+	}
+
+	log.Println("runnning on port " + port)
+
+	r.Run(":" + port)
 
 }
