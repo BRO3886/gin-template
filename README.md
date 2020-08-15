@@ -69,7 +69,7 @@ if err != nil {
 ## Current routes
 
 
-1. **GET    /api/v1/ping **
+1. **```GET```  /api/v1/ping**
 
 
 Response:
