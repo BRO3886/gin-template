@@ -40,6 +40,7 @@ func main() {
 	userSvc := user.NewService(userRepo)
 
 	r := gin.Default()
+
 	r.HandleMethodNotAllowed = true
 	v1 := r.Group("api/v1")
 	{
@@ -49,6 +50,8 @@ func main() {
 		usrGroup := v1.Group("/user")
 		{
 			usrGroup.POST("/register", handlers.RegisterUser(userSvc))
+			usrGroup.POST("/login", handlers.LoginUser(userSvc))
+			usrGroup.POST("/getdetails", handlers.GetUserDetails(userSvc))
 		}
 		// v1.Group("article")
 	}

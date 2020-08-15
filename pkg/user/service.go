@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"regexp"
 
+	"github.com/BRO3886/gin-learn/api"
+
 	"github.com/BRO3886/gin-learn/pkg"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -13,6 +15,7 @@ type Service interface {
 	Register(user *User) (*User, error)
 	Login(email, password string) (*User, error)
 	GetUserByID(id uint32) (*User, error)
+	GetUserByEmail(email string) (*User, error)
 	GetRepo() Repository
 }
 
@@ -27,6 +30,14 @@ func NewService(r Repository) Service {
 
 func (s *service) GetRepo() Repository {
 	return s.repo
+}
+
+func (s *service) GetUserByEmail(email string) (*User, error) {
+	user, err := s.repo.FindByEmail(email)
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
 }
 
 func (s *service) Register(user *User) (*User, error) {
@@ -49,6 +60,10 @@ func (s *service) Register(user *User) (*User, error) {
 }
 
 func (s *service) Login(email, password string) (*User, error) {
+	if len(email) == 0 || len(password) == 0 {
+		return nil, api.ErrInvalidCredentials
+	}
+
 	user := &User{}
 	user, err := s.repo.FindByEmail(user.Email)
 	if err != nil {
@@ -62,7 +77,7 @@ func (s *service) Login(email, password string) (*User, error) {
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(passHash), []byte(password)); err != nil {
-		return nil, err
+		return nil, api.ErrInvalidCredentials
 	}
 	return user, nil
 }
