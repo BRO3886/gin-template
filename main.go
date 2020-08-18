@@ -9,6 +9,7 @@ import (
 	"github.com/BRO3886/gin-learn/api/middleware"
 
 	"github.com/BRO3886/gin-learn/api/handlers"
+	"github.com/BRO3886/gin-learn/pkg/article"
 	"github.com/BRO3886/gin-learn/pkg/user"
 	"github.com/jinzhu/gorm"
 
@@ -35,14 +36,16 @@ func main() {
 		fmt.Println(err)
 		log.Fatal("error conneting to DB")
 	}
-	db.LogMode(false)
-	db.AutoMigrate(&user.User{})
+	db.LogMode(true)
+	db.AutoMigrate(&user.User{}, &article.Article{})
 	log.Println("connected to db")
 
 	defer db.Close()
 
 	userRepo := user.NewDatabaseRepo(db)
 	userSvc := user.NewService(userRepo)
+	articleRepo := article.NewDatabaseRepo(db)
+	articleSvc := article.NewService(articleRepo)
 
 	r := gin.Default()
 
@@ -61,7 +64,12 @@ func main() {
 				usrGroup.GET("/getdetails", handlers.GetUserDetails(userSvc))
 			}
 		}
-		// v1.Group("article")
+		articleGroup := v1.Group("/articles")
+		articleGroup.Use(middleware.BasicJWTAuth(userSvc))
+		{
+			articleGroup.POST("/create", handlers.CreateNewArticle(articleSvc))
+			articleGroup.GET("/myarticles", handlers.GetArticlesByUser(articleSvc))
+		}
 	}
 
 	port := os.Getenv("PORT")

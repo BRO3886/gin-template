@@ -15,4 +15,5 @@ var (
 	ErrUnauthorised       = errors.New("You are not allowed to perform this action")
 	ErrForbidden          = errors.New("Access to this resource is forbidden")
 	ErrAlreadyExists      = errors.New("already exists")
+	ErrNoTitle            = errors.New("Title not provided")
 )
