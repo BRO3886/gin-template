@@ -36,7 +36,9 @@ func main() {
 		fmt.Println(err)
 		log.Fatal("error conneting to DB")
 	}
-	db.LogMode(true)
+	if os.Getenv("LOG_MODE") == "FALSE" {
+		db.LogMode(false)
+	}
 	db.AutoMigrate(&user.User{}, &article.Article{})
 	log.Println("connected to db")
 
@@ -69,6 +71,7 @@ func main() {
 		{
 			articleGroup.POST("/create", handlers.CreateNewArticle(articleSvc))
 			articleGroup.GET("/myarticles", handlers.GetArticlesByUser(articleSvc))
+			articleGroup.GET("", handlers.GetAllArticles(articleSvc))
 		}
 	}
 

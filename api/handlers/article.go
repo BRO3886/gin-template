@@ -72,3 +72,20 @@ func GetArticlesByUser(svc article.Service) gin.HandlerFunc {
 		})
 	}
 }
+
+//GetAllArticles irrespective of user
+func GetAllArticles(svc article.Service) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		articles, err := svc.GetAllArticles()
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			ctx.Abort()
+			return
+		}
+		ctx.JSON(http.StatusOK, gin.H{
+			"message":  "articles found",
+			"total":    len(*articles),
+			"articles": *articles,
+		})
+	}
+}
