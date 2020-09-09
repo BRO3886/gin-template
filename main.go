@@ -27,7 +27,7 @@ func connectDB() (*gorm.DB, error) {
 
 func main() {
 	log.Println("Stared backend server")
-	gin.SetMode(os.Getenv("GIN_MODE"))
+	gin.SetMode(gin.ReleaseMode)
 
 	db, err := connectDB()
 	if err != nil {
