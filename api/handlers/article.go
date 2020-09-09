@@ -89,3 +89,14 @@ func GetAllArticles(svc article.Service) gin.HandlerFunc {
 		})
 	}
 }
+
+//MakeArticleHandlers used to make routes for articles
+func MakeArticleHandlers(r *gin.RouterGroup, articleSvc article.Service) {
+	articleGroup := r.Group("/articles")
+	articleGroup.Use(middleware.BasicJWTAuth())
+	{
+		articleGroup.POST("/create", CreateNewArticle(articleSvc))
+		articleGroup.GET("/myarticles", GetArticlesByUser(articleSvc))
+		articleGroup.GET("", GetAllArticles(articleSvc))
+	}
+}

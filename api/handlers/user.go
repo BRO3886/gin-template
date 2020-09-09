@@ -89,3 +89,16 @@ func GetUserDetails(svc user.Service) gin.HandlerFunc {
 		return
 	}
 }
+
+// MakeUserHandler defines the routes for user
+func MakeUserHandler(r *gin.RouterGroup, userSvc user.Service) {
+	usrGroup := r.Group("/user")
+	{
+		usrGroup.POST("/register", RegisterUser(userSvc))
+		usrGroup.POST("/login", LoginUser(userSvc))
+		usrGroup.Use(middleware.BasicJWTAuth())
+		{
+			usrGroup.GET("/getdetails", GetUserDetails(userSvc))
+		}
+	}
+}

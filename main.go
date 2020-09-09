@@ -6,8 +6,6 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/BRO3886/gin-learn/api/middleware"
-
 	"github.com/BRO3886/gin-learn/api/handlers"
 	"github.com/BRO3886/gin-learn/pkg/article"
 	"github.com/BRO3886/gin-learn/pkg/user"
@@ -57,22 +55,8 @@ func main() {
 		v1.GET("/ping", func(c *gin.Context) {
 			c.JSON(http.StatusOK, gin.H{"message": "pong"})
 		})
-		usrGroup := v1.Group("/user")
-		{
-			usrGroup.POST("/register", handlers.RegisterUser(userSvc))
-			usrGroup.POST("/login", handlers.LoginUser(userSvc))
-			usrGroup.Use(middleware.BasicJWTAuth(userSvc))
-			{
-				usrGroup.GET("/getdetails", handlers.GetUserDetails(userSvc))
-			}
-		}
-		articleGroup := v1.Group("/articles")
-		articleGroup.Use(middleware.BasicJWTAuth(userSvc))
-		{
-			articleGroup.POST("/create", handlers.CreateNewArticle(articleSvc))
-			articleGroup.GET("/myarticles", handlers.GetArticlesByUser(articleSvc))
-			articleGroup.GET("", handlers.GetAllArticles(articleSvc))
-		}
+		handlers.MakeUserHandler(v1, userSvc)
+		handlers.MakeArticleHandlers(v1, articleSvc)
 	}
 
 	port := os.Getenv("PORT")

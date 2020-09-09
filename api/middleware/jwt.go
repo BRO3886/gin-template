@@ -5,8 +5,6 @@ import (
 	"os"
 	"time"
 
-	"github.com/BRO3886/gin-learn/pkg/user"
-
 	"github.com/BRO3886/gin-learn/api"
 
 	"github.com/dgrijalva/jwt-go"
@@ -20,7 +18,7 @@ type Token struct {
 }
 
 //BasicJWTAuth auth token checker
-func BasicJWTAuth(svc user.Service) gin.HandlerFunc {
+func BasicJWTAuth() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		tokenHeader := ctx.Request.Header.Get("Authorization")
 		if tokenHeader == "" {
@@ -39,12 +37,12 @@ func BasicJWTAuth(svc user.Service) gin.HandlerFunc {
 			return
 		}
 
-		_, err = svc.GetUserByID(tk.ID)
-		if err != nil {
-			ctx.JSON(http.StatusForbidden, gin.H{"message": api.ErrInvalidToken.Error()})
-			ctx.Abort()
-			return
-		}
+		// _, err = svc.GetUserByID(tk.ID)
+		// if err != nil {
+		// 	ctx.JSON(http.StatusForbidden, gin.H{"message": api.ErrInvalidToken.Error()})
+		// 	ctx.Abort()
+		// 	return
+		// }
 
 		ctx.Next()
 	}
