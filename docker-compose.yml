@@ -1,0 +1,55 @@
+version: "3.7"
+
+networks:
+    backend:
+
+services:
+    app:
+        build: 
+            context: .
+            dockerfile: Dockerfile
+        command: ["/app/main"]  
+        # "./wait-for-it.sh", "db:5432", "--",
+        container_name: app
+        ports: 
+            - 8000:8000
+        restart: always
+        env_file: ./.env
+        environment: 
+            - ON_SERVER=${ON_SERVER}
+            - GIN_MODE=${GIN_MODE}
+            - LOG_MODE=${LOG_MODE}
+            - DB_URI=${DB_URI}
+            - PORT=${PORT}
+        depends_on: 
+            - db
+        networks:
+            - backend
+            
+    db:
+        image: "postgres:12.2-alpine"
+        container_name: db
+        restart: always
+        ports: 
+            - 5432:5432
+        env_file: ./.env
+        environment:
+            - POSTGRES_PASSWORD=${DB_PASS}
+            - POSTGRES_USER=${DB_USER}
+            - POSTGRES_DB=${DB_NAME}
+        volumes:
+            - db-data:/var/lib/postgresql
+        
+        networks:
+            - backend
+    
+    # adminer:
+    #     container_name: adminer
+    #     image: adminer
+    #     restart: always
+    #     ports:
+    #         - 8080:8080
+    #     networks: 
+    #         - internal
+volumes:
+    db-data:    

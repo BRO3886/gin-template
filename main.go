@@ -9,11 +9,11 @@ import (
 	"github.com/BRO3886/gin-learn/api/handlers"
 	"github.com/BRO3886/gin-learn/pkg/article"
 	"github.com/BRO3886/gin-learn/pkg/user"
-	"github.com/jinzhu/gorm"
-
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	"github.com/joho/godotenv"
+	"github.com/lib/pq"
 )
 
 func connectDB() (*gorm.DB, error) {
@@ -22,21 +22,37 @@ func connectDB() (*gorm.DB, error) {
 	if os.Getenv("DATABASE_URL") != "" {
 		return gorm.Open("postgres", os.Getenv("DATABASE_URL"))
 	}
-	return gorm.Open("sqlite3", "test.db")
+	//local
+	conn, err := pq.ParseURL(os.Getenv("DB_URI"))
+	fmt.Println(conn)
+	if err != nil {
+		log.Fatal(err)
+		return nil, err
+	}
+	return gorm.Open("postgres", conn)
 }
 
 func main() {
-	log.Println("Stared backend server")
+	if os.Getenv("ON_SERVER") != "True" {
+		// Loading the .env file
+		err := godotenv.Load()
+		if err != nil {
+			log.Fatal("Error loading .env file")
+		}
+	}
+
+	log.Println("Started gin backend server")
 	gin.SetMode(gin.ReleaseMode)
 
 	db, err := connectDB()
 	if err != nil {
 		fmt.Println(err)
-		log.Fatal("error conneting to DB")
+		log.Fatal("error connecting to DB")
 	}
 	if os.Getenv("LOG_MODE") == "FALSE" {
 		db.LogMode(false)
 	}
+
 	db.AutoMigrate(&user.User{}, &article.Article{})
 	log.Println("connected to db")
 
@@ -61,7 +77,7 @@ func main() {
 
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "5432"
+		port = "8080"
 	}
 
 	log.Println("runnning on port " + port)
