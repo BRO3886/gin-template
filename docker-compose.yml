@@ -72,7 +72,7 @@ services:
             - traefik.frontend.rule=Host:gin-learn.siddharthavarma.tech
             - traefik.port=8080
             - traefik.enable=true
-            # - traefik.frontend.auth.basic.users=admin:$apr1$qV96xSuQ$y3da6TZxscGOI3dCCQpfO/
+            - traefik.frontend.auth.basic.users=admin:$apr1$qV96xSuQ$y3da6TZxscGOI3dCCQpfO/
     
     # whoami:
     #     image: containous/whoami
