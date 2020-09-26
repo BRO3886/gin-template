@@ -58,7 +58,6 @@ services:
     traefik:
         image: traefik:1.7.2-alpine
         restart: always
-        container_name: traefik
         networks:
             - web
         ports:

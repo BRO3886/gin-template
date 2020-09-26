@@ -18,9 +18,10 @@ defaultEntryPoints = ["http", "https"]
 
 
 [api]
-entrypoint="traefik"
-dashboard=true
-address=":8080"
+entrypoint="dashboard"
+# entrypoint="traefik"
+# dashboard=true
+# address=":8080"
 
 [acme]
 email="siddverma1999@gmail.com"
