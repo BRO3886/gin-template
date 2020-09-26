@@ -27,7 +27,7 @@ services:
         env_file: ./.env
         labels:
             - traefik.backend=app
-            - traefik.frontend.rule=Host:gin-learn.siddharthavarma.tech;PathPrefix:/api/v1
+            - traefik.frontend.rule=Host:gin-learn.siddharthavarma.tech
             - traefik.docker.network=web
             - traefik.port=8000
         networks:
@@ -70,7 +70,6 @@ services:
             - /ops/proxy/acme.json:/acme.json
         labels:
             - traefik.frontend.rule=Host:gin-learn.siddharthavarma.tech
-            - traefik.frontend.entryPoints=https
             - traefik.port=8080
     
     # adminer:
