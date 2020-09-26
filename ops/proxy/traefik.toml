@@ -22,7 +22,7 @@ entrypoint="dashboard"
 [acme]
 email="siddverma1999@gmail.com"
 storage="acme.json"
-caServer = "https://acme-staging-v02.api.letsencrypt.org/directory"
+# caServer = "https://acme-staging-v02.api.letsencrypt.org/directory"
 entryPoint="https"
 onHostRule=true
   [acme.httpChallenge]
