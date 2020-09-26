@@ -66,13 +66,13 @@ services:
             - "443:443"
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
-            - /ops/proxy/traefik.toml:/traefik.toml
-            - /ops/proxy/acme.json:/acme.json
+            - ./ops/proxy/traefik.toml:/traefik.toml
+            - ./ops/proxy/acme.json:/acme.json
         labels:
-            - traefik.frontend.rule=Host:gin-learn.siddharthavarma.tech;PathPrefixStrip:/traefik
+            - traefik.frontend.rule=Host:gin-learn.siddharthavarma.tech
             - traefik.port=8080
             - traefik.enable=true
-            - traefik.frontend.auth.basic.users=admin:$apr1$qV96xSuQ$y3da6TZxscGOI3dCCQpfO/
+            # - traefik.frontend.auth.basic.users=admin:$apr1$qV96xSuQ$y3da6TZxscGOI3dCCQpfO/
     
     # adminer:
     #     container_name: adminer
