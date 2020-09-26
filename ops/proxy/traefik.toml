@@ -1,3 +1,4 @@
+logLevel = "WARN"
 defaultEntryPoints = ["http", "https"]
 
 [entryPoints]
