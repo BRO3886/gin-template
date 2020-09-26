@@ -13,7 +13,6 @@ services:
             context: .
             dockerfile: ./ops/images/go.Dockerfile
         command: ["/app/main"]  
-        # "./wait-for-it.sh", "db:5432", "--",
         container_name: app
         environment: 
             - ON_SERVER=${ON_SERVER}
