@@ -69,7 +69,7 @@ services:
             - /ops/proxy/traefik.toml:/traefik.toml
             - /ops/proxy/acme.json:/acme.json
         labels:
-            - traefik.basic.frontend.rule=Host:gin-learn.siddharthavarma.tech
+            - traefik.frontend.rule=Host:gin-learn.siddharthavarma.tech
             - traefik.frontend.entryPoints=https
             - traefik.port=8080
     
