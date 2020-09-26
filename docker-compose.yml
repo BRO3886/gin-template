@@ -66,10 +66,11 @@ services:
             - "443:443"
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
-            - ./ops/proxy/traefik.toml:/traefik.toml
-            - ./ops/proxy/acme.json:/acme.json
+            - /ops/proxy/traefik.toml:/traefik.toml
+            - /ops/proxy/acme.json:/acme.json
         labels:
-            - traefik.frontend.rule=Host:hades.dscvit.com
+            - traefik.basic.frontend.rule=Host:gin-learn.siddharthavarma.tech
+            - traefik.frontend.entryPoints=https
             - traefik.port=8080
     
     # adminer:

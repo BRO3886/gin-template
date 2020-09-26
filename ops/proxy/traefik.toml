@@ -1,27 +1,28 @@
-defaultEntryPoints = ["http","https"]
+defaultEntryPoints = ["http", "https"]
 
 [entryPoints]
   [entryPoints.dashboard]
     address=":8080"
     [entryPoints.dashboard.auth]
       [entryPoints.dashboard.auth.basic]
-        users = ["admin:$apr1$dIQBeY8w$nTxNUvcLNR/v4FEcv59WQ."]
+        users = ["admin:$apr1$qV96xSuQ$y3da6TZxscGOI3dCCQpfO/"]  
+  [entryPoints.http]
+    address=":80"
+    [entryPoints.http.redirect]
+        entryPoint="https"
+  [entryPoints.https]
+    address=":443"
+    [entryPoints.http.tls]
+
+
 
 [api]
 entrypoint="dashboard"
 
-[entryPoints.http]
-  address=":80"
-    [entryPoints.http.redirect]
-      entryPoint="https"
-[entryPoints.https]
-  address=":443"
-    [entryPoints.http.tls]
-
-
 [acme]
 email="siddverma1999@gmail.com"
-storage="acme.json"
+storage="/acme.json"
+caServer = "https://acme-staging-v02.api.letsencrypt.org/directory"
 entryPoint="https"
 onHostRule=true
   [acme.httpChallenge]
