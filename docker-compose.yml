@@ -1,20 +1,20 @@
 version: "3.7"
 
 networks:
-    backend:
+    web:
+        external: true
+        name: web
+    internal:
+        external: false
 
 services:
     app:
         build: 
             context: .
-            dockerfile: Dockerfile
+            dockerfile: ./ops/images/go.Dockerfile
         command: ["/app/main"]  
         # "./wait-for-it.sh", "db:5432", "--",
         container_name: app
-        ports: 
-            - 8000:8000
-        restart: always
-        env_file: ./.env
         environment: 
             - ON_SERVER=${ON_SERVER}
             - GIN_MODE=${GIN_MODE}
@@ -23,8 +23,19 @@ services:
             - PORT=${PORT}
         depends_on: 
             - db
+            - traefik
+        env_file: ./.env
+        labels:
+            - traefik.backend=app
+            - traefik.frontend.rule=Host:gin-learn.siddharthavarma.tech;PathPrefix:/api/v1
+            - traefik.docker.network=web
+            - traefik.port=8000
         networks:
-            - backend
+            - web
+            - internal
+        ports: 
+            - 8000:8000
+        restart: always
             
     db:
         image: "postgres:12.2-alpine"
@@ -39,9 +50,27 @@ services:
             - POSTGRES_DB=${DB_NAME}
         volumes:
             - db-data:/var/lib/postgresql
-        
+        labels:
+            - traefik.enable=false
         networks:
-            - backend
+            - internal
+
+    traefik:
+        image: traefik:1.7.2-alpine
+        restart: always
+        container_name: traefik
+        networks:
+            - web
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - ./ops/proxy/traefik.toml:/traefik.toml
+            - ./ops/proxy/acme.json:/acme.json
+        labels:
+            - traefik.frontend.rule=Host:hades.dscvit.com
+            - traefik.port=8080
     
     # adminer:
     #     container_name: adminer
