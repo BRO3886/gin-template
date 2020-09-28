@@ -35,7 +35,6 @@ services:
         networks:
             - web
             - internal
-        ports: 
         restart: always
             
     db:
