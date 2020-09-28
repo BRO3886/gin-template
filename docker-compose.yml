@@ -55,10 +55,13 @@ services:
         networks:
             - internal
 
-    traefik:
+    traefik: 
         image: traefik:1.7.2-alpine
         restart: always
         container_name: traefik
+        env_file: ./.env
+        environment: 
+            DO_AUTH_TOKEN:${DO_TOKEN}
         networks:
             - web
         ports:

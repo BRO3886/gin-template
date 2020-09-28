@@ -6,7 +6,7 @@ defaultEntryPoints = ["http", "https"]
     address=":8080"
     [entryPoints.dashboard.auth]
       [entryPoints.dashboard.auth.basic]
-        users = ["admin:$apr1$qV96xSuQ$y3da6TZxscGOI3dCCQpfO/"]  
+        users = ["admin:$apr1$ELRnnboi$/Kn2hQFXgL9IK.GhVo3DW0"]  
   [entryPoints.http]
     address=":80"
     [entryPoints.http.redirect]
@@ -26,11 +26,14 @@ entrypoint="dashboard"
 [acme]
 email="siddverma1999@gmail.com"
 storage="acme.json"
-acmeLogging=true
 entryPoint="https"
 onHostRule=true
   [acme.httpChallenge]
   entryPoint="http"
+onDemand=false
+  [acme.dnsChallenge]
+    provider="digitalocean"
+    delayBeforeCheck=0
 
 [docker]
 domain="gin-learn.siddharthavarma.tech"
