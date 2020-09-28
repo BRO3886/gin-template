@@ -26,9 +26,9 @@ services:
         env_file: ./.env
         labels:
             - traefik.backend=app
-            - traefik.http.routers.blog.rule=Host(`gin-learn.siddharthavarma.tech`) && Path(`/api/v1/`)
-            - traefik.http.routers.blog.tls=true
-            - traefik.http.routers.blog.tls.certresolver=myresolver
+            - traefik.http.routers.app.rule=Host(`gin-learn.siddharthavarma.tech`) && Path(`/api/v1/`)
+            - traefik.http.routers.app.tls=true
+            - traefik.http.routers.app.tls.certresolver=myresolver
             - traefik.docker.network=web
             - traefik.port=8000
             - traefik.enable=true
