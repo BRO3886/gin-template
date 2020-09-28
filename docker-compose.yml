@@ -75,7 +75,7 @@ services:
             - ./ops/proxy/traefik.toml:/traefik.toml
             - ./ops/proxy/acme.json:/acme.json
             - ./letsencrypt:/letsencrypt
-            - ./ops/dynamic.yaml:/dynamic.yaml
+            - ./ops/proxy/dynamic.yaml:/dynamic.yaml
         labels:
             - traefik.enable=true
             - traefik.routers.api.rule=Host(`gin-learn.siddharthavarma.tech`)

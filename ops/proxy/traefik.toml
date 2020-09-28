@@ -20,7 +20,7 @@
 ################################################################
 [api]
   # remove in prod
-  insecure = true
+  insecure = t
   dashboard = true
   debug = true
 
