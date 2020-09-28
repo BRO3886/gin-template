@@ -29,7 +29,7 @@ services:
             - traefik.http.routers.app.rule=Host(`gin-learn.siddharthavarma.tech`) && PathPrefix(`/api/v1/`)
             - traefik.http.routers.app.tls=true
             - traefik.http.routers.middlewares=redirect@file
-            - traefik.http.routers.app.entrypoints=web-secured
+            - traefik.http.routers.app.entrypoints=web
             - traefik.http.routers.app.tls.certresolver=myresolver
             - traefik.docker.network=web
             - traefik.port=8000
