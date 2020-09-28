@@ -1,5 +1,5 @@
 http:
-    middleware:
+    middlewares:
         redirect:
             redirectScheme:
                 scheme: https
