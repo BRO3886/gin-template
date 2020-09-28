@@ -1,42 +1,63 @@
-logLevel = "WARN"
-defaultEntryPoints = ["http", "https"]
+################################################################
+# Global configuration
+################################################################
+[global]
+  checkNewVersion = true
+  sendAnonymousUsage = true
 
+################################################################
+# Entrypoints configuration
+################################################################
 [entryPoints]
-  [entryPoints.dashboard]
-    address=":8080"
-    [entryPoints.dashboard.auth]
-      [entryPoints.dashboard.auth.basic]
-        users = ["admin:$apr1$ELRnnboi$/Kn2hQFXgL9IK.GhVo3DW0"]  
-  [entryPoints.http]
-    address=":80"
-    [entryPoints.http.redirect]
-        entryPoint="https"
-  [entryPoints.https]
-    address=":443"
-    [entryPoints.http.tls]
+  [entryPoints.web]
+    address = ":80"
 
+  [entryPoints.websecure]
+    address = ":443"
 
-
+################################################################
+# API and dashboard configuration
+################################################################
 [api]
-entrypoint="dashboard"
-# entrypoint="traefik"
-# dashboard=true
-# address=":8080"
+  # remove in prod
+  insecure = true
+  dashboard = true
+  debug = true
 
-[acme]
-email="siddverma1999@gmail.com"
-storage="acme.json"
-entryPoint="https"
-onHostRule=true
-  [acme.httpChallenge]
-  entryPoint="http"
-onDemand=false
-  [acme.dnsChallenge]
-    provider="digitalocean"
-    delayBeforeCheck=0
+################################################################
+# Ping configuration
+################################################################
 
-[docker]
-domain="gin-learn.siddharthavarma.tech"
-watch=true
-network="web"
+# Enable ping
+[ping]
+  entryPoint = "traefik"
 
+################################################################
+# Docker configuration backend
+################################################################
+
+[providers.docker]
+
+  # Required
+  # Default: "unix:///var/run/docker.sock"
+  #
+  # endpoint = "tcp://10.10.10.10:2375"
+
+  # Default host rule.
+  #
+  # Optional
+  # Default: "Host(`{{ normalize .Name }}`)"
+  #
+  defaultRule = "Host(`gin-learn.siddharthavarma.tech`)"
+  network = "web"
+
+[providers.file]
+  filename = "dynamic.yaml"
+
+
+[certificatesResolvers.myresolver.acme]
+  email = "siddverma1999@gmail.com"
+  storage = "acme.json"
+  [certificatesResolvers.myresolver.acme.httpChallenge]
+    # used during the challenge
+    entryPoint = "web"
