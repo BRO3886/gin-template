@@ -35,6 +35,8 @@ services:
         networks:
             - web
             - internal
+        ports: 
+            - 8000:8000
         restart: always
             
     db:
