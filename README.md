@@ -52,3 +52,6 @@
 </p>
 
 
+## LICENSE
+
+* MIT
